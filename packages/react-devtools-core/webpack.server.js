@@ -18,16 +18,23 @@ const __DEV__ = true; // process.env.NODE_ENV !== 'production';
 module.exports = {
   mode: __DEV__ ? 'development' : 'production',
   devtool: __DEV__ ? 'source-map' : false,
+  // target: 'electron-main',
+  target: 'node',
+  externals: ['ws'],
   entry: {
-    backend: './src/backend.js',
+    server: './src/server.js',
   },
   output: {
-    path: __dirname + '/build',
+    path: __dirname + '/build', // eslint-disable-line no-path-concat
     filename: '[name].js',
-
-    // This name is important; standalone references it in order to connect.
-    library: 'ReactDevToolsBackend',
-    libraryTarget: 'umd',
+    library: '[name]',
+    libraryTarget: 'commonjs2',
+  },
+  node: {
+    // Don't replace __dirname!
+    // This would break the standalone DevTools ability to load the backend.
+    // see https://github.com/facebook/react-devtools/issues/1269
+    __dirname: false,
   },
   plugins: __DEV__ ? [] : [
     // Ensure we get production React
@@ -41,7 +48,24 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel-loader',
         options: JSON.parse(readFileSync(resolve(__dirname, '../../.babelrc'))),
+      }/*,
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: 'style-loader',
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+              modules: true,
+              localIdentName: '[local]___[hash:base64:5]',
+            },
+          },
+        ],
       },
+      */
     ],
   },
 };

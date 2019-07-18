@@ -18,7 +18,10 @@
     "backend:watch": "cross-env NODE_ENV=production ../../node_modules/.bin/webpack --config webpack.backend.js --watch",
     "standalone": "cross-env NODE_ENV=production ../../node_modules/.bin/webpack --config webpack.standalone.js",
     "standalone:watch": "cross-env NODE_ENV=production ../../node_modules/.bin/webpack --config webpack.standalone.js --watch",
-    "build": "yarn run backend && yarn run standalone",
+    "standalone_browser": "cross-env NODE_ENV=production ../../node_modules/.bin/webpack --config webpack.browser.js",
+    "standalone_server": "cross-env NODE_ENV=production ../../node_modules/.bin/webpack --config webpack.server.js",
+    "build0": "yarn run backend && yarn run standalone",
+    "build": "yarn run backend && yarn run standalone_browser && yarn run standalone_server",
     "prepublish": "yarn run build"
   },
   "author": "Jared Forsyth",
